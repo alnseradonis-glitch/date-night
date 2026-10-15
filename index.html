@@ -1,0 +1,292 @@
+
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Date Night — Your Choice (Not Really)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg1: #1a0b2e;
+  --bg2: #3d0f3d;
+  --pink: #ff4d8d;
+  --pink2: #ff85b3;
+  --gold: #ffd166;
+  --card: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.18);
+  --text: #fff;
+  --muted: #d8c7e8;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: 'Cairo', sans-serif;
+  background: radial-gradient(circle at top, var(--bg2), var(--bg1) 70%);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: hidden;
+  position: relative;
+}
+.hearts { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.heart {
+  position: absolute;
+  color: rgba(255,77,141,0.25);
+  font-size: 24px;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+.card {
+  position: relative;
+  z-index: 1;
+  width: min(680px, 100%);
+  background: var(--card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 36px 28px 28px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.45);
+  text-align: center;
+  animation: cardIn 0.8s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(30px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.top-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  border-bottom: 1px dashed rgba(255,255,255,0.15);
+  padding-bottom: 14px;
+  margin-bottom: 22px;
+}
+.badge {
+  display: inline-block;
+  background: rgba(255,77,141,0.15);
+  border: 1px solid rgba(255,77,141,0.4);
+  color: var(--pink2);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+h1 {
+  font-size: clamp(26px, 5vw, 40px);
+  line-height: 1.4;
+  font-weight: 900;
+  margin-bottom: 14px;
+}
+h1 span { color: var(--pink2); }
+.sub {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.9;
+  margin-bottom: 10px;
+}
+.hint {
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 28px;
+}
+.buttons {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+  min-height: 60px;
+}
+button {
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  border-radius: 16px;
+  padding: 14px 28px;
+  font-size: 17px;
+  font-weight: 800;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.btn-yes {
+  background: linear-gradient(135deg, var(--pink), #ff2d6f);
+  color: #fff;
+  box-shadow: 0 10px 25px rgba(255,45,111,0.4);
+}
+.btn-yes:hover { transform: translateY(-3px) scale(1.03); }
+.btn-no {
+  background: rgba(255,255,255,0.08);
+  color: var(--muted);
+  border: 1px solid rgba(255,255,255,0.15);
+  position: relative;
+  z-index: 2;
+}
+.footer {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px dashed rgba(255,255,255,0.15);
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: var(--muted);
+}
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.modal.show { opacity: 1; pointer-events: auto; }
+.modal-box {
+  background: linear-gradient(160deg, #2a103a, #1a0b2e);
+  border: 1px solid rgba(255,77,141,0.35);
+  border-radius: 24px;
+  padding: 32px 24px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+  transform: scale(0.9);
+  transition: transform 0.3s;
+}
+.modal.show .modal-box { transform: scale(1); }
+.modal-box h2 { font-size: 26px; margin-bottom: 10px; }
+.modal-box p { color: var(--muted); line-height: 1.8; margin-bottom: 22px; }
+.btn-close {
+  background: var(--pink);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-weight: 800;
+}
+@media (max-width: 480px) {
+  .card { padding: 28px 18px 22px; border-radius: 22px; }
+  .top-line { font-size: 9px; }
+  button { padding: 13px 22px; font-size: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="hearts" id="hearts"></div>
+
+<main class="card">
+  <div class="top-line">
+    <span>DEPARTMENT OF LOVE</span>
+    <span>EST. FOREVER</span>
+  </div>
+
+  <div class="badge">استدعاء رسمي من الإدارة العليا</div>
+
+  <h1>حبيبي… حاب تعزمني ع <span>طلعة</span>؟</h1>
+  <p class="sub">فكّر منيح قبل ما تجاوب… مستقبلك العاطفي بيعتمد عهالقرار 🙂</p>
+  <p class="hint">اختار براحتك… بس في جواب أحلى من التاني</p>
+
+  <div class="buttons" id="buttons">
+    <button class="btn-yes" id="yesBtn">أكيد! ❤️</button>
+    <button class="btn-no" id="noBtn">لأ 🙃</button>
+  </div>
+
+  <div class="footer">
+    <span>FILE № 001 / ♡</span>
+    <span>TOP SECRET</span>
+    <span>LOVE AFFAIRS</span>
+  </div>
+</main>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <h2>تم القبول رسمياً 🎉</h2>
+    <p>خلاص، ما في رجعة. الإدارة العليا وافقت، والطلعة صارت إلزامية بحب. 😌❤️</p>
+    <button class="btn-close" id="closeBtn">تمام، موافقة</button>
+  </div>
+</div>
+
+<script>
+const heartsContainer = document.getElementById('hearts');
+const heartChars = ['❤', '♡', '💖', '💘', '💕'];
+for (let i = 0; i < 18; i++) {
+  const heart = document.createElement('div');
+  heart.className = 'heart';
+  heart.textContent = heartChars[Math.floor(Math.random() * heartChars.length)];
+  heart.style.left = Math.random() * 100 + '%';
+  heart.style.fontSize = (14 + Math.random() * 24) + 'px';
+  heart.style.animationDuration = (8 + Math.random() * 10) + 's';
+  heart.style.animationDelay = (-Math.random() * 15) + 's';
+  heartsContainer.appendChild(heart);
+}
+
+const noBtn = document.getElementById('noBtn');
+const yesBtn = document.getElementById('yesBtn');
+const modal = document.getElementById('modal');
+const closeBtn = document.getElementById('closeBtn');
+
+const noMessages = [
+  'لأ 🙃',
+  'متأكد؟',
+  'فكّر مرة تانية',
+  'ما بتقنعني',
+  'آخر فرصة',
+  'خلاص استسلم 😌',
+  'الجواب الصح هو نعم'
+];
+let noCount = 0;
+
+function moveNoButton() {
+  noCount++;
+  noBtn.textContent = noMessages[Math.min(noCount, noMessages.length - 1)];
+
+  const x = (Math.random() - 0.5) * 220;
+  const y = (Math.random() - 0.5) * 160;
+  noBtn.style.transform = `translate(${x}px, ${y}px) scale(${Math.max(0.6, 1 - noCount * 0.08)})`;
+
+  if (noCount >= 6) {
+    noBtn.style.opacity = '0';
+    noBtn.style.pointerEvents = 'none';
+  }
+}
+
+noBtn.addEventListener('mouseenter', moveNoButton);
+noBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  moveNoButton();
+});
+
+yesBtn.addEventListener('click', () => {
+  modal.classList.add('show');
+});
+
+closeBtn.addEventListener('click', () => {
+  modal.classList.remove('show');
+});
+
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) modal.classList.remove('show');
+});
+</script>
+</body>
+</html>
+``` 
